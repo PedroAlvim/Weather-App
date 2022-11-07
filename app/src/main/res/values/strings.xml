@@ -3,7 +3,7 @@
     <string name="app_name">Weather App</string>
     <string name="all_city">Cidade</string>
 
-
     <string name="blank_city">Favor insira qual cidade buscar</string>
+    <string name="temp">%1$s°</string>
 
 </resources>

@@ -7,6 +7,6 @@ class WeatherForecastModel(
     @SerializedName("timestamp_local")
     var time: String?,
     var temp: String?,
-    var weather: WeatherModel?
+    var weather: WeatherModel
 
 )

@@ -6,7 +6,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.databinding.ActivityWeatherBinding
+import com.example.weatherapp.list.WeatherAdapter
 import com.example.weatherapp.webclient.RetrofitInit
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
@@ -17,9 +20,6 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
 
@@ -36,6 +36,9 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var mainTemp: TextView
     private lateinit var mainDescription: TextView
     private var gson = Gson()
+
+    private var adapter: WeatherAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,15 +72,16 @@ class WeatherActivity : AppCompatActivity() {
 
                         withContext(Main) {
                             titleCity.text = jsonObject.get("city_name").asString
-                            mainHour.text = timeConverter(weatherForecast[0].time.toString())
-                            mainTemp.text = weatherForecast[0].temp.toString()+"°" //TODO Retira esse warning
+                            mainHour.text = Utils().timeConverter(weatherForecast[0].time.toString())
+                            mainTemp.text = getString(R.string.temp, weatherForecast[0].temp.toString())
                             mainDescription.text =
-                                weatherForecast[0].weather?.description.toString()
+                                weatherForecast[0].weather.description.toString()
                             Toast.makeText(
                                 this@WeatherActivity,
                                 "Previsão encontrada com sucesso",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            initList(weatherForecast)
                         }
                     }
                 }
@@ -94,11 +98,13 @@ class WeatherActivity : AppCompatActivity() {
         mainDescription = binding.mainDescription
     }
 
-    private fun timeConverter(time: String): String {
-        val outputFormat: DateFormat = SimpleDateFormat("HH 'h'", Locale.getDefault())
-        val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+    private fun initList(weatherForecast: List<WeatherForecastModel>){
+        adapter = WeatherAdapter(weatherForecast)
 
-        val date: Date = inputFormat.parse(time)!!
-        return outputFormat.format(date)
+
+        val recyclerView: RecyclerView = binding.horizontalWeather
+
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapter
     }
 }

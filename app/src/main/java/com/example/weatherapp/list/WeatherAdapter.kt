@@ -3,7 +3,7 @@ package com.example.weatherapp.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.WeatherForecastModel
+import com.example.weatherapp.model.WeatherForecastModel
 import com.example.weatherapp.databinding.WheatherCardLayoutBinding
 
 class WeatherAdapter(private val list: List<WeatherForecastModel>) : RecyclerView.Adapter<WeatherViewHolder>() {

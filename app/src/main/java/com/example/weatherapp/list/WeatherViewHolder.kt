@@ -2,8 +2,8 @@ package com.example.weatherapp.list
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
-import com.example.weatherapp.Utils
-import com.example.weatherapp.WeatherForecastModel
+import com.example.weatherapp.utils.Utils
+import com.example.weatherapp.model.WeatherForecastModel
 import com.example.weatherapp.databinding.WheatherCardLayoutBinding
 
 class WeatherViewHolder(private val binding: WheatherCardLayoutBinding) :

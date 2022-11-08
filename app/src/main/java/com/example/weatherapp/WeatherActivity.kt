@@ -72,7 +72,7 @@ class WeatherActivity : AppCompatActivity() {
 
                         withContext(Main) {
                             titleCity.text = jsonObject.get("city_name").asString
-                            mainHour.text = Utils().timeConverter(weatherForecast[0].time.toString())
+                            mainHour.text = Utils.timeConverter(weatherForecast[0].time.toString())
                             mainTemp.text = getString(R.string.temp, weatherForecast[0].temp.toString())
                             mainDescription.text =
                                 weatherForecast[0].weather.description.toString()
@@ -101,10 +101,7 @@ class WeatherActivity : AppCompatActivity() {
     private fun initList(weatherForecast: List<WeatherForecastModel>){
         adapter = WeatherAdapter(weatherForecast)
 
-
         val recyclerView: RecyclerView = binding.horizontalWeather
-
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
     }
 }

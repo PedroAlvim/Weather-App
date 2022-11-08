@@ -4,7 +4,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Utils {
+object Utils {
     fun timeConverter(time: String): String {
         val outputFormat: DateFormat = SimpleDateFormat("HH 'h'", Locale.getDefault())
         val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())

@@ -1,11 +1,12 @@
 package com.example.weatherapp.viewmodel
 
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.InfoFragment
+import com.example.weatherapp.R
 import com.example.weatherapp.model.WeatherForecastModel
 import com.example.weatherapp.model.WeatherModel
 import com.example.weatherapp.repository.WeatherRepository
@@ -33,6 +34,9 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
     private var _listWeather = MutableLiveData<List<WeatherForecastModel>>()
     val listWeather: LiveData<List<WeatherForecastModel>> get() = _listWeather
 
+    private var _infoHour = MutableLiveData<String>()
+    val infoHour: LiveData<String> get() = _infoHour
+
     private var weatherModel: WeatherModel? = null
 
     fun getWeather(city: String) {
@@ -40,6 +44,7 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
             _message.postValue("Favor preencha uma cidade")
             return
         }
+
         viewModelScope.launch(Dispatchers.IO) {
             _message.postValue("Buscando cidade")
             try {
@@ -53,6 +58,7 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
                     weather.data.let {
                         _listWeather.postValue(it)
                     }
+                    _message.postValue("Cidade encontrada")
                 }
 
                 if (weatherModel == null){
@@ -60,10 +66,15 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
                     return@launch
                 }
 
-                _message.postValue("Cidade encontrada")
             }catch (e: Exception){
                 _message.postValue("Erro ao tentar buscar cidade: $e")
             }
         }
+    }
+
+    fun goToInfo(fragmentTransaction : FragmentTransaction){
+        fragmentTransaction.replace(R.id.fragment, InfoFragment())
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 }

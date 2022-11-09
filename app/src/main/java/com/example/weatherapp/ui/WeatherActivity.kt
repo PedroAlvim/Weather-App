@@ -1,7 +1,8 @@
-package com.example.weatherapp
+package com.example.weatherapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weatherapp.R
 import com.example.weatherapp.databinding.ActivityWeatherBinding
 
 class WeatherActivity : AppCompatActivity() {
@@ -11,7 +12,6 @@ class WeatherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWeatherBinding.inflate(layoutInflater)
-        supportActionBar!!.hide()
         setContentView(binding.root)
 
         val fragmentManager = supportFragmentManager

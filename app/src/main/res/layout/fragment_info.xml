@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_blue"
-    tools:context=".InfoFragment">
+    tools:context=".ui.InfoFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -108,6 +108,7 @@
         android:layout_height="80dp"
         android:layout_marginBottom="20dp"
         android:background="#00000000"
+        android:layout_marginEnd="14dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_baseline_arrow_left"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -120,6 +121,7 @@
         android:layout_height="80dp"
         android:background="#00000000"
         android:contentDescription="@null"
+        android:layout_marginStart="14dp"
         android:src="@drawable/ic_baseline_arrow_right"
         app:layout_constraintBottom_toBottomOf="@id/left_arrow"
         app:layout_constraintEnd_toEndOf="parent"

@@ -8,7 +8,7 @@ class WeatherForecastModel(
     var time: String?,
     var temp: String?,
     @SerializedName("app_temp")
-    var AppTemp: String?,
+    var appTemp: String?,
     var pop: String?,
     var precip: String?,
     var rh: String?,

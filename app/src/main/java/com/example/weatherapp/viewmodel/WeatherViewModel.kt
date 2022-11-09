@@ -1,12 +1,9 @@
 package com.example.weatherapp.viewmodel
 
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.InfoFragment
-import com.example.weatherapp.R
 import com.example.weatherapp.model.WeatherForecastModel
 import com.example.weatherapp.model.WeatherModel
 import com.example.weatherapp.repository.WeatherRepository
@@ -14,7 +11,9 @@ import com.example.weatherapp.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewModel() {
+class WeatherViewModel : ViewModel() {
+
+    private val weatherRepository: WeatherRepository = WeatherRepository()
 
     private var _titleCity = MutableLiveData<String>()
     val titleCity: LiveData<String> get() = _titleCity
@@ -29,18 +28,20 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
     val mainDescription: LiveData<String> get() = _mainDescription
 
     private var _message = MutableLiveData<String>()
-    val message: LiveData<String> get() = _message
+    val message: LiveData<String> get() = _message //TODO EVENT AQUI
 
     private var _listWeather = MutableLiveData<List<WeatherForecastModel>>()
     val listWeather: LiveData<List<WeatherForecastModel>> get() = _listWeather
 
-    private var _infoHour = MutableLiveData<String>()
-    val infoHour: LiveData<String> get() = _infoHour
+    private var _infoWeatherForecast = MutableLiveData<WeatherForecastModel>()
+    val infoWeatherForecast: LiveData<WeatherForecastModel> get() = _infoWeatherForecast
 
     private var weatherModel: WeatherModel? = null
 
+    private var infoIndex: Int = 0
+
     fun getWeather(city: String) {
-        if(city.isEmpty()){
+        if (city.isEmpty()) {
             _message.postValue("Favor preencha uma cidade")
             return
         }
@@ -48,7 +49,7 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
         viewModelScope.launch(Dispatchers.IO) {
             _message.postValue("Buscando cidade")
             try {
-                    weatherModel = weatherRepository.getWeatherFromCity(city)
+                weatherModel = weatherRepository.getWeatherFromCity(city)
 
                 weatherModel?.let { weather ->
                     _titleCity.postValue(weather.city.toString())
@@ -61,20 +62,44 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
                     _message.postValue("Cidade encontrada")
                 }
 
-                if (weatherModel == null){
+                if (weatherModel == null) {
                     _message.postValue("Não foi possivel encontrar a cidade informada")
                     return@launch
                 }
 
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _message.postValue("Erro ao tentar buscar cidade: $e")
             }
         }
     }
 
-    fun goToInfo(fragmentTransaction : FragmentTransaction){
-        fragmentTransaction.replace(R.id.fragment, InfoFragment())
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+    fun loadData() {
+        //TODO SE FOR NULO ACABA O BTN
+        infoIndex = 0
+        weatherModel?.let {
+            _infoWeatherForecast.postValue(it.data?.get(0))
+        } ?: _message.postValue("Não há dados a serem exibidos")
+    }
+
+    fun nextForecast() {
+        weatherModel?.let {
+            if (infoIndex < it.data!!.size - 1) {
+                infoIndex++
+            } else {
+                _message.postValue("Não há mais horarios a serem exibidos")
+            }
+            _infoWeatherForecast.postValue(it.data?.get(infoIndex))
+        } ?: _message.postValue("Não há dados a serem exibidos")
+    }
+
+    fun previousForecast() {
+        weatherModel?.let {
+            if (infoIndex > 0) {
+                infoIndex--
+            } else {
+                _message.postValue("Não há mais horarios a serem exibidos")
+            }
+            _infoWeatherForecast.postValue(it.data?.get(infoIndex))
+        } ?: _message.postValue("Não há dados a serem exibidos")
     }
 }

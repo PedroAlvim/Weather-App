@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_blue"
-    tools:context=".info">
+    tools:context=".InfoFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -55,13 +55,22 @@
                 tools:text="Sensação térmica: 25°" />
 
             <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/app_temp"
+                tools:text="Poucas Nuvens" />
+
+            <TextView
                 android:id="@+id/pop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/app_temp"
+                app:layout_constraintTop_toBottomOf="@id/description"
                 tools:text="Probabilidade de Precipitação: 13%" />
 
             <TextView

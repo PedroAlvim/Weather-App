@@ -37,5 +37,6 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
         binding.rh.text = requireActivity().getString(R.string.info_rh, "${weather.rh}%")
         binding.clouds.text =
             requireActivity().getString(R.string.info_clouds, "${weather.clouds}%")
+
     }
 }

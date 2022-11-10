@@ -1,5 +1,6 @@
 package com.example.weatherapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,7 +52,7 @@ class WeatherViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _eventMessage.postValue(MessageEvent.ShowLoadingCity)
             try {
-                weatherModel = weatherRepository.getWeatherFromCity(city)
+                weatherModel = weatherRepository.getWeatherFromCity2(city)
 
                 weatherModel?.let { weather ->
                     _titleCity.postValue(weather.city.toString())
@@ -65,6 +66,7 @@ class WeatherViewModel : ViewModel() {
                 } ?: _eventMessage.postValue(MessageEvent.ShowNoFindCity)
 
             } catch (e: Exception) {
+                Log.e("WeatherViewModel", "Failed to load city", e)
                 _eventMessage.postValue(MessageEvent.ShowErrorFindCity)
             }
         }

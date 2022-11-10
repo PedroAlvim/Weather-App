@@ -2,7 +2,6 @@ package com.example.weatherapp.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.weatherapp.R
@@ -26,13 +25,6 @@ class InfoFragment : Fragment(R.layout.fragment_info) {
 
         viewModel.loadData()
         viewModel.infoWeatherForecast.observe(viewLifecycleOwner) { setInfo(it) }
-        viewModel.message.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                requireContext(),
-                it,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
     private fun setInfo(weather: WeatherForecastModel) {

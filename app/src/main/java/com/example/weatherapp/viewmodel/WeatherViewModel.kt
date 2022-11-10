@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherapp.MessageEvent
+import com.example.weatherapp.SingleLiveEvent
 import com.example.weatherapp.model.WeatherForecastModel
 import com.example.weatherapp.model.WeatherModel
 import com.example.weatherapp.repository.WeatherRepository
@@ -27,8 +29,8 @@ class WeatherViewModel : ViewModel() {
     private var _mainDescription = MutableLiveData<String>()
     val mainDescription: LiveData<String> get() = _mainDescription
 
-    private var _message = MutableLiveData<String>()
-    val message: LiveData<String> get() = _message //TODO EVENT AQUI
+    private var _eventMessage = SingleLiveEvent<MessageEvent>()
+    val eventMessage: LiveData<MessageEvent> get() = _eventMessage
 
     private var _listWeather = MutableLiveData<List<WeatherForecastModel>>()
     val listWeather: LiveData<List<WeatherForecastModel>> get() = _listWeather
@@ -42,12 +44,12 @@ class WeatherViewModel : ViewModel() {
 
     fun getWeather(city: String) {
         if (city.isEmpty()) {
-            _message.postValue("Favor preencha uma cidade")
+            _eventMessage.postValue(MessageEvent.ShowEmptyCity)
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _message.postValue("Buscando cidade")
+            _eventMessage.postValue(MessageEvent.ShowLoadingCity)
             try {
                 weatherModel = weatherRepository.getWeatherFromCity(city)
 
@@ -59,26 +61,20 @@ class WeatherViewModel : ViewModel() {
                     weather.data.let {
                         _listWeather.postValue(it)
                     }
-                    _message.postValue("Cidade encontrada")
-                }
-
-                if (weatherModel == null) {
-                    _message.postValue("Não foi possivel encontrar a cidade informada")
-                    return@launch
-                }
+                    _eventMessage.postValue(MessageEvent.ShowFindCity)
+                } ?: _eventMessage.postValue(MessageEvent.ShowNoFindCity)
 
             } catch (e: Exception) {
-                _message.postValue("Erro ao tentar buscar cidade: $e")
+                _eventMessage.postValue(MessageEvent.ShowErrorFindCity)
             }
         }
     }
 
     fun loadData() {
-        //TODO SE FOR NULO ACABA O BTN
         infoIndex = 0
         weatherModel?.let {
             _infoWeatherForecast.postValue(it.data?.get(0))
-        } ?: _message.postValue("Não há dados a serem exibidos")
+        } ?: _eventMessage.postValue(MessageEvent.ShowNoData)
     }
 
     fun nextForecast() {
@@ -86,10 +82,10 @@ class WeatherViewModel : ViewModel() {
             if (infoIndex < it.data!!.size - 1) {
                 infoIndex++
             } else {
-                _message.postValue("Não há mais horarios a serem exibidos")
+                _eventMessage.postValue(MessageEvent.ShowNoMoreTime)
             }
             _infoWeatherForecast.postValue(it.data?.get(infoIndex))
-        } ?: _message.postValue("Não há dados a serem exibidos")
+        } ?: _eventMessage.postValue(MessageEvent.ShowNoData)
     }
 
     fun previousForecast() {
@@ -97,9 +93,9 @@ class WeatherViewModel : ViewModel() {
             if (infoIndex > 0) {
                 infoIndex--
             } else {
-                _message.postValue("Não há mais horarios a serem exibidos")
+                _eventMessage.postValue(MessageEvent.ShowNoMoreTime)
             }
             _infoWeatherForecast.postValue(it.data?.get(infoIndex))
-        } ?: _message.postValue("Não há dados a serem exibidos")
+        } ?: _eventMessage.postValue(MessageEvent.ShowNoData)
     }
 }

@@ -11,4 +11,12 @@
     <string name="info_rh">Humidade relativa: %1$s</string>
     <string name="info_clouds">Cobertura de nuvem: %1$s</string>
 
+    <string name="message_empty_city">Favor preencha uma cidade</string>
+    <string name="message_loading_city">Buscando cidade</string>
+    <string name="message_find_city">Cidade encontrada</string>
+    <string name="message_no_find_city">Não foi possivel encontrar a cidade informada</string>
+    <string name="message_error_find_city">Erro ao tentar buscar cidade</string>
+    <string name="message_no_data">Não há dados a serem exibidos</string>
+    <string name="message_no_more_time">Não há mais horarios a serem exibidos</string>
+
 </resources>
